@@ -1,1 +1,106 @@
-<p>为什么会心情低落？</p>
+<!-- <p>为什么会心情低落？</p> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <!-- // 重置样式 -->
+    <link rel="stylesheet" href="./css/index.css" />
+    <!-- //主页css -->
+  </head>
+  <body>
+    <!-- 大盒子 -->
+    <div class="content">
+      <div class="box1">
+        <video loop muted autoplay class="vdo">
+          <source src="./video/14514.mp4" type="video/mp4" />
+          <!-- 更改14514.mp4链接可以更换背景视频 -->
+        </video>
+      </div>
+      <div class="box2"></div>
+      <div class="box3"></div>
+      <div class="box4"></div>
+      <div class="box5"></div>
+    </div>
+    <!-- 小圆点 -->
+    <ul class="xyd">
+      <li class="active"></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+
+    <!-- <script src="./boot/bootstrap.bundle.min.js"></script> -->
+    <script>
+      //获取页面的大盒子
+      const content = document.querySelector(".content");
+      // 获取小圆点li
+      const lis = document.querySelectorAll(".xyd li");
+      // 获取body的高度
+      const viewHeight = document.body.clientHeight;
+      // 创建索引
+      var index = 0;
+      // 创建点击事件运行节流函数0.4秒可以运行一次
+      document.addEventListener("mousewheel", xx(gd, 400));
+      // ---------------------------------------------------------------------------------------------------
+      // for循环遍历
+      for (let i = 0; i < lis.length; i++) {
+        // 给每个li小圆点创建索引号
+        lis[i].tag = i;
+        // 创建小圆点点击事件
+        lis[i].onclick = function () {
+          for (var j = 0; j < lis.length; j++) {
+            // 排他思想取消所有小圆点样式
+            lis[j].className = "";
+            // 设置点击小圆点样式为高亮active
+            this.className = "active";
+            // 改变小圆点索引为点击的索引号
+            index = this.tag;
+            // 更改页面的位置为：索引号*body高度
+            content.style.top = -this.tag * viewHeight + "px";
+          }
+        };
+      }
+
+      // --------------------------------------
+      // 节流
+      function xx(fn, sm) {
+        // 创建空变量
+        let timeout;
+        return function () {
+          if (!timeout) {
+            timeout = setTimeout(() => {
+              timeout = null;
+              fn.apply(this, arguments);
+            }, sm);
+          }
+        };
+      }
+      // -----------------------------------------------------------------
+      // 页面切换事件
+      function gd(e) {
+        // e.wheelDelta是滚轮事件  >0是像上滚动，<0是向下滚动
+        if (e.wheelDelta > 0) {
+          index--;
+          if (index < 0) {
+            index = 0;
+          }
+        }
+        if (e.wheelDelta < 0) {
+          index++;
+          if (index > lis.length - 1) index = lis.length - 1;
+        }
+        content.style.top = -index * viewHeight + "px";
+        for (var j = 0; j < lis.length; j++) {
+          lis[j].className = "";
+        }
+        lis[index].className = "active";
+      }
+    </script>
+  </body>
+</html>
